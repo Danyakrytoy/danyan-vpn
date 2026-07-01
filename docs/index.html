@@ -6,222 +6,231 @@
 <title>DanyanVPN</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes spring{0%{transform:scale(1)}40%{transform:scale(.88)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
-@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
-@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(52,199,89,.25)}50%{box-shadow:0 0 0 20px rgba(52,199,89,0)}}
-
-:root{--bg:#000;--text:#fff;--text2:rgba(255,255,255,.5);--text3:rgba(255,255,255,.2);--accent:#0a84ff;--accent2:#5e5ce6;--green:#34c759;--orange:#ff9f0a;--red:#ff453a;--radius:16px;--pill:22px}
-body{font-family:-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;-webkit-font-smoothing:antialiased;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#0d1b2a 0%,#000 70%)}
-.safe{height:100dvh;display:flex;flex-direction:column;padding:0 16px;overflow:hidden}
-.head{text-align:center;padding-top:54px;animation:fade .5s ease}
-.head h1{font-size:36px;font-weight:700;letter-spacing:-.5px;background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.head p{font-size:13px;color:var(--text2);margin-top:2px}
-
-/* Power button — centered, big, glass */
-.power-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:fade .6s ease .1s both;gap:16px}
-.power{width:100px;height:100px;border-radius:50px;border:none;outline:none;-webkit-appearance:none;
-background:rgba(255,255,255,.06);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
-border:1.5px solid rgba(255,255,255,.12);cursor:pointer;font-size:36px;
-transition:all .35s cubic-bezier(.34,1.56,.64,1);position:relative;
-box-shadow:0 8px 32px rgba(0,0,0,.4);
-}
-.power:active{transform:scale(.85)}
-.power.on{background:rgba(52,199,89,.12);border-color:rgba(52,199,89,.3)}
-.power.loading{background:rgba(255,159,10,.1);border-color:rgba(255,159,10,.2);pointer-events:none}
-.power-label{font-size:15px;font-weight:500;color:var(--text2);transition:.3s}
+:root{--bg:#000;--text:#fff;--text2:rgba(255,255,255,.55);--text3:rgba(255,255,255,.2);--accent:#0a84ff;--accent2:#5e5ce6;--green:#30d158;--orange:#ff9f0a;--red:#ff453a;--radius:14px;--pill:24px}
+body{font-family:-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;background:radial-gradient(ellipse at 50% 20%,#0a1a2e 0%,#000 60%)}
+.safe{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:0 20px;position:relative}
+.header{display:flex;justify-content:space-between;align-items:center;padding-top:56px;padding-bottom:8px;animation:fadeIn .6s ease}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.header .badge{font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(48,209,88,.12);color:var(--green);font-weight:600}
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;animation:fadeIn .6s ease .1s both}
+.power-btn{width:96px;height:96px;border-radius:50%;border:none;outline:none;-webkit-appearance:none;position:relative;cursor:pointer;
+background:rgba(255,255,255,.05);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
+border:1.5px solid rgba(255,255,255,.1);font-size:34px;
+transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.power-btn:active{transform:scale(.82)}
+.power-btn.on{background:rgba(48,209,88,.1);border-color:rgba(48,209,88,.25);box-shadow:0 0 30px rgba(48,209,88,.1)}
+.power-btn.on::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(48,209,88,.15);animation:breathe 2s ease infinite}
+.power-btn.loading{background:rgba(255,159,10,.08);border-color:rgba(255,159,10,.15);pointer-events:none}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:0}}
+.power-label{font-size:14px;font-weight:500;color:var(--text2);transition:.3s}
 .power-label.on{color:var(--green)}
-.power-label.loading{color:var(--orange);animation:pulse 1s}
-.power-status{font-size:14px;font-family:'SF Mono',monospace;color:var(--accent);font-weight:500;min-height:20px}
-
-/* Country scroll */
-.country-section{flex-shrink:0;margin-bottom:16px;animation:fade .5s ease .2s both}
-.country-section label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-left:4px;margin-bottom:6px;display:block}
-.country-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 2px;scrollbar-width:none}
-.country-scroll::-webkit-scrollbar{display:none}
-.country-pill{-webkit-appearance:none;appearance:none;border:none;outline:none;flex-shrink:0;
-padding:10px 18px;border-radius:30px;font-size:14px;font-family:inherit;font-weight:500;
-background:rgba(255,255,255,.06);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
-border:1px solid rgba(255,255,255,.08);color:var(--text2);cursor:pointer;
-transition:all .25s cubic-bezier(.34,1.56,.64,1);white-space:nowrap
-}
-.country-pill:active{transform:scale(.9)}
-.country-pill.selected{background:rgba(10,132,255,.12);border-color:rgba(10,132,255,.25);color:var(--accent)}
-
-/* Quota bar */
-.quota-card{flex-shrink:0;background:rgba(255,255,255,.04);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid rgba(255,255,255,.06);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;gap:12px;animation:fade .5s ease .25s both}
-.quota-ring{width:36px;height:36px;border-radius:50%;position:relative;flex-shrink:0}
-.quota-ring svg{transform:rotate(-90deg)}
-.quota-ring .bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:3}
-.quota-ring .fg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s}
-.quota-right{flex:1}
-.quota-gb{font-size:17px;font-weight:700;letter-spacing:-.3px}
-.quota-label{font-size:11px;color:var(--text2);margin-top:1px}
-
-/* Tab bar */
-.tabs{position:fixed;bottom:0;left:0;right:0;padding:8px 16px 32px;display:flex;gap:0;justify-content:center;animation:fade .5s ease .3s both}
-.tab{-webkit-appearance:none;appearance:none;border:none;outline:none;font-family:inherit;
-flex:1;max-width:110px;padding:8px 12px;border-radius:12px;font-size:11px;font-weight:500;
-background:rgba(255,255,255,.04);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
-border:1px solid rgba(255,255,255,.06);color:var(--text3);cursor:pointer;
-display:flex;flex-direction:column;align-items:center;gap:3px;transition:.25s;
-}
-.tab.active{background:rgba(10,132,255,.1);border-color:rgba(10,132,255(.2);color:var(--accent)}
-.tab .icon{font-size:18px}
-.tab:active{transform:scale(.93)}
-
-/* Toast */
-.toast-wrap{position:fixed;top:0;left:0;right:0;z-index:100;pointer-events:none;padding:54px 16px 0;text-align:center}
-.toast{display:inline-block;padding:10px 20px;border-radius:14px;font-size:13px;font-weight:500;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
-opacity:0;transform:translateY(-12px) scale(.95);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
-.toast.show{opacity:1;transform:translateY(0) scale(1)}
-.toast.ok{background:rgba(52,199,89,.15);border:1px solid rgba(52,199,89(.2);color:var(--green)}
-.toast.err{background:rgba(255,69,58,.15);border:1px solid rgba(255,69,58,.2);color:var(--red)}
-
-/* Subs tab */
-.subs-screen{display:flex;flex-direction:column;gap:10px;padding-top:54px;animation:fade .4s ease}
-.subs-screen h2{font-size:28px;font-weight:700;margin-bottom:4px}
-.subs-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:16px}
-.subs-card.highlight{background:rgba(10,132,255,.06);border-color:rgba(10,132,255(.15)}
-.subs-price{font-size:28px;font-weight:700}
-.subs-price span{font-size:14px;font-weight:400;color:var(--text2)}
-.subs-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.5}
-.subs-btn{-webkit-appearance:none;border:none;font-family:inherit;width:100%;padding:14px;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;transition:.2s;margin-top:10px}
-.subs-btn:active{transform:scale(.97)}
-.subs-btn.buy{background:var(--accent);color:#fff}
-.subs-btn.gb{background:rgba(255,159,10,.1);color:var(--orange);border:1px solid rgba(255,159,10(.15)}
+.power-label.loading{color:var(--orange)}
+.power-sub{font-size:13px;font-family:'SF Mono',monospace;color:var(--accent);min-height:20px;font-weight:500}
+.countries{width:100%;margin-bottom:10px;animation:fadeIn .6s ease .15s both}
+.countries label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-left:4px;margin-bottom:8px;display:block}
+.scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.pill{-webkit-appearance:none;border:none;outline:none;flex-shrink:0;padding:10px 18px;border-radius:var(--pill);font-size:13px;font-family:inherit;font-weight:500;
+background:rgba(255,255,255,.04);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
+border:1px solid rgba(255,255,255,.06);color:var(--text2);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
+.pill:active{transform:scale(.88)}
+.pill.sel{background:rgba(10,132,255,.1);border-color:rgba(10,132,255,.2);color:var(--accent)}
+.quota{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius);background:rgba(255,255,255,.03);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);border:1px solid rgba(255,255,255,.05);animation:fadeIn .6s ease .2s both;margin-bottom:8px}
+.ring{width:34px;height:34px;flex-shrink:0;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .bg{fill:none;stroke:rgba(255,255,255,.05);stroke-width:3}
+.ring .fg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.qright{flex:1}
+.qgb{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.qsub{font-size:10px;color:var(--text2);margin-top:1px}
+.tabs{display:flex;gap:6px;padding:6px 0 28px;justify-content:center;animation:fadeIn .6s ease .25s both}
+.tab{-webkit-appearance:none;border:none;outline:none;font-family:inherit;flex:1;max-width:104px;padding:8px 0;border-radius:10px;font-size:10px;font-weight:600;
+background:rgba(255,255,255,.03);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
+border:1px solid rgba(255,255,255,.05);color:var(--text3);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:.25s}
+.tab .ico{font-size:18px}
+.tab:active{transform:scale(.92)}
+.tab.act{background:rgba(10,132,255,.08);border-color:rgba(10,132,255,.15);color:var(--accent)}
+.toast-wrap{position:fixed;top:0;left:0;right:0;z-index:99;pointer-events:none;padding:54px 20px 0;text-align:center}
+.toast{display:inline-block;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:500;backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);opacity:0;transform:translateY(-10px) scale(.95);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.toast.sh{opacity:1;transform:translateY(0) scale(1)}
+.toast.ok{background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.15);color:var(--green)}
+.toast.er{background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.15);color:var(--red)}
+.subs{padding:54px 0 0;animation:fadeIn .4s ease;overflow-y:auto;flex:1}
+.subs h2{font-size:26px;font-weight:700;margin-bottom:2px}
+.subs>p{font-size:13px;color:var(--text2);margin-bottom:18px}
+.scard{border-radius:var(--radius);padding:16px;margin-bottom:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px)}
+.scard.hl{background:rgba(10,132,255,.05);border-color:rgba(10,132,255,.12)}
+.spri{font-size:26px;font-weight:700}
+.spri sp{font-size:13px;font-weight:400;color:var(--text2)}
+.sdesc{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6}
+.sbtn{-webkit-appearance:none;border:none;font-family:inherit;width:100%;padding:14px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;margin-top:12px}
+.sbtn:active{transform:scale(.97)}
+.sbtn.pr{background:var(--accent);color:#fff}
+.sbtn.sec{background:rgba(255,159,10,.08);color:var(--orange);border:1px solid rgba(255,159,10,.1)}
+.onboard{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;animation:fadeIn .4s ease}
+.onboard h2{font-size:24px;font-weight:700;margin-bottom:6px}
+.onboard p{font-size:14px;color:var(--text2);text-align:center;line-height:1.6;margin-bottom:20px;max-width:300px}
+.onboard .steps{width:100%;max-width:320px;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.step{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border-radius:12px;padding:14px 16px;border:1px solid rgba(255,255,255,.05)}
+.step .num{width:28px;height:28px;border-radius:50%;background:rgba(10,132,255,.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.step .txt{font-size:13px;line-height:1.4}
+.step .txt b{display:block;font-size:14px}
+.onboard .gotbtn{-webkit-appearance:none;border:none;font-family:inherit;background:var(--accent);color:#fff;padding:16px 40px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:.2s}
+.onboard .gotbtn:active{transform:scale(.95)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 <div class="toast-wrap"><div class="toast" id="toast"></div></div>
-
+<div id="onboard" class="onboard" style="display:none">
+<h2>🚀 DanyanVPN</h2>
+<p>Чтобы VPN работал на телефоне, нужно установить WireGuard — это бесплатно и занимает 20 секунд</p>
+<div class="steps">
+<div class="step"><div class="num">1</div><div class="txt"><b>Установи WireGuard</b>Нажми на кнопку ниже — откроется App Store / Google Play</div></div>
+<div class="step"><div class="num">2</div><div class="txt"><b>Вернись в DanyanVPN</b>И нажми на кнопку ⚡ — конфиг загрузится автоматически</div></div>
+<div class="step"><div class="num">3</div><div class="txt"><b>Нажми «Разрешить»</b>WireGuard сам импортирует настройки — ты сразу в сети 🌍</div></div>
+</div>
+<button class="gotbtn" onclick="installWG()">⬇ Установить WireGuard</button>
+<p style="font-size:11px;color:var(--text3);margin-top:12px">Уже есть WireGuard? <a href="#" onclick="dismissOnboard();return false" style="color:var(--accent);text-decoration:none">Пропустить →</a></p>
+</div>
 <div class="safe" id="mainScreen">
-<div class="head"><h1>DanyanVPN</h1><p>Нажми, чтобы включить</p></div>
-
-<div class="power-wrap">
-<div><button class="power" id="power" onclick="toggle()">⚡</button></div>
+<div class="header"><h1>DanyanVPN</h1><div class="badge" id="statusBadge">Готов</div></div>
+<div class="center" id="centerArea">
+<button class="power-btn" id="power" onclick="toggle()">⚡</button>
 <div class="power-label" id="powerLabel">Нажми, чтобы включить</div>
-<div class="power-status" id="powerStatus"></div>
+<div class="power-sub" id="powerSub"></div>
 </div>
-
-<div class="country-section">
-<label>Страна</label>
-<div class="country-scroll" id="countryScroll"></div>
+<div class="countries">
+<label>Страна выхода</label>
+<div class="scroll" id="countryScroll"></div>
 </div>
-
-<div class="quota-card" id="quotaCard">
-<div class="quota-ring"><svg width="36" height="36"><circle class="bg" cx="18" cy="18" r="16"/><circle class="fg" id="quotaArc" cx="18" cy="18" r="16" stroke-dasharray="100.53" stroke-dashoffset="0"/></svg></div>
-<div class="quota-right"><div class="quota-gb" id="quotaGb">1.00 GB</div><div class="quota-label" id="quotaLabel">Бесплатно · осталось</div></div>
+<div class="quota" id="quotaCard">
+<div class="ring"><svg width="34" height="34"><circle class="bg" cx="17" cy="17" r="15"/><circle class="fg" id="quotaArc" cx="17" cy="17" r="15" stroke-dasharray="94.25" stroke-dashoffset="0"/></svg></div>
+<div class="qright"><div class="qgb" id="quotaGb">1.00 GB</div><div class="qsub" id="quotaSub">Бесплатно · осталось</div></div>
 </div>
-
 <div class="tabs">
-<button class="tab active" onclick="showTab('main')"><span class="icon">🛡</span>VPN</button>
-<button class="tab" onclick="showTab('subs')"><span class="icon">💎</span>Тарифы</button>
-<button class="tab" onclick="showTab('aff')"><span class="icon">👥</span>Партнёры</button>
+<button class="tab act" onclick="showTab('main')"><span class="ico">🛡</span>VPN</button>
+<button class="tab" onclick="showTab('subs')"><span class="ico">💎</span>Тарифы</button>
+<button class="tab" onclick="showTab('aff')"><span class="ico">👥</span>Партнёры</button>
 </div>
 </div>
 
 <script>
 const params=new URLSearchParams(window.location.search);
 const API=params.get('api')||window.location.origin;
-const COUNTRIES=['🌍 Auto','🇺🇸 USA','🇯🇵 Japan','🇩🇪 Germany','🇳🇱 Netherlands','🇸🇬 Singapore','🇬🇧 UK','🇦🇺 Australia','🇧🇷 Brazil'];
-let sel='auto',cfg='',on=false,tgId='';
+const KEYS=['auto','us','jp','de','nl','sg','gb','au','br'];
+const NAMES=['🌍 Auto','🇺🇸 USA','🇯🇵 Japan','🇩🇪 Germany','🇳🇱 Netherlands','🇸🇬 Singapore','🇬🇧 UK','🇦🇺 Australia','🇧🇷 Brazil'];
+let sel='auto',on=false,cfg='',tgId='';
+const LS=window.localStorage;
 
-function af(path,opts){const h=opts?.headers||{};h['bypass-tunnel-reminder']='1';return fetch(API+path,{...opts,headers:h})}
-
-function toast(m,t){const e=document.querySelector('.toast');e.textContent=m;e.className='toast '+t+' show';clearTimeout(e._h);e._h=setTimeout(()=>e.className='toast',2600)}
+function af(p,o){const h=o?.headers||{};h['bypass-tunnel-reminder']='1';return fetch(API+p,{...o,headers:h})}
+function toast(m,t){const e=document.querySelector('.toast');e.textContent=m;e.className='toast '+t+' sh';clearTimeout(e._h);e._h=setTimeout(()=>e.className='toast',2600)}
 
 function renderCountries(){
 const el=document.getElementById('countryScroll');el.innerHTML='';
-const keys=['auto','us','jp','de','nl','sg','gb','au','br'];
-keys.forEach((k,i)=>{
-const b=document.createElement('button');b.className='country-pill'+(k===sel?' selected':'');
-b.textContent=COUNTRIES[i];b.onclick=()=>{if(!on){sel=k;renderCountries()}};el.appendChild(b)});
+KEYS.forEach((k,i)=>{
+const b=document.createElement('button');b.className='pill'+(k===sel?' sel':'');b.textContent=NAMES[i];b.onclick=()=>{if(!on){sel=k;renderCountries()}};el.appendChild(b)});
 }
 
 function setPower(active,loading){
 const p=document.getElementById('power');
-p.className='power'+(active?' on':'')+(loading?' loading':'');
+p.className='power-btn'+(active?' on':'')+(loading?' loading':'');
 p.textContent=active?'🔒':loading?'':'⚡';
 const l=document.getElementById('powerLabel');
-l.textContent=active?'Защищено':loading?'Подключаюсь...':'Нажми, чтобы включить';
+l.textContent=active?'Подключено к DanyanVPN':loading?'Подключаем...':'Нажми, чтобы включить';
 l.className='power-label'+(active?' on':'')+(loading?' loading':'');
+document.getElementById('statusBadge').textContent=active?'Защищено':loading?'...':'Готов';
 }
 
-function updateQuota(gb,hasSub){
+function updQuota(gb,hasSub){
 const pct=Math.min(100,Math.round(gb/1*100));
-const circ=document.getElementById('quotaArc');
-const dash=100.53-(100.53*pct/100);
-circ.setAttribute('stroke-dashoffset',dash);
-circ.setAttribute('stroke',hasSub?'#34c759':pct>20?'#0a84ff':'#ff9f0a');
+const arc=document.getElementById('quotaArc');const dash=94.25-(94.25*pct/100);
+arc.setAttribute('stroke-dashoffset',dash);arc.setAttribute('stroke',hasSub?'#30d158':pct>20?'#0a84ff':'#ff9f0a');
 document.getElementById('quotaGb').textContent=hasSub?'∞':gb.toFixed(2)+' GB';
-document.getElementById('quotaLabel').textContent=hasSub?'Премиум · безлимитно':'Бесплатно · осталось';
+document.getElementById('quotaSub').textContent=hasSub?'Премиум · безлимит':'Бесплатно · осталось';
+}
+
+async function loadUser(){
+try{if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.user)tgId=Telegram.WebApp.initDataUnsafe.user.id}catch(e){}
+const r=await af('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId})});
+const d=await r.json();if(d.remaining_gb!==undefined)updQuota(d.remaining_gb,d.has_subscription);
 }
 
 async function toggle(){
-if(on){
-on=false;setPower(false);cfg='';document.getElementById('powerStatus').textContent='';toast('Отключено','ok');return
-}
+if(on){on=false;setPower(false);cfg='';document.getElementById('powerSub').textContent='';toast('VPN отключён','ok');return}
 setPower(false,true);
 try{
 const body={region:sel};if(tgId)body.telegram_id=tgId;
 const r=await af('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-const d=await r.json();
-if(!d.success)throw new Error(d.error);
+const d=await r.json();if(!d.success)throw new Error(d.error);
 cfg=d.config;on=true;setPower(true);
-document.getElementById('powerStatus').textContent='🌐 '+COUNTRIES[['auto','us','jp','de','nl','sg','gb','au','br'].indexOf(sel)];
-if(d.remaining_gb!==undefined)updateQuota(d.remaining_gb,false);
-toast('VPN включён','ok');
-// One-tap open WireGuard (behind the scenes)
+const idx=KEYS.indexOf(sel);document.getElementById('powerSub').textContent='🌐 '+NAMES[idx];
+if(d.remaining_gb!==undefined)updQuota(d.remaining_gb,false);
+toast('VPN включён ✓','ok');
+LS.setItem('seen_onboard','1');
 const b64=btoa(cfg);window.location.href=API+'/wg?config='+encodeURIComponent(b64);
-}catch(e){setPower(false);toast(e.message||'Ошибка','err')}
+}catch(e){setPower(false);toast(e.message||'Ошибка','er')}
 }
 
+function installWG(){
+const ua=navigator.userAgent.toLowerCase();
+const url=ua.includes('iphone')||ua.includes('ipad')?'https://apps.apple.com/app/wireguard/id1441195209':'https://play.google.com/store/apps/details?id=com.wireguard.android';
+window.location.href=url;
+}
+function dismissOnboard(){document.getElementById('onboard').style.display='none';LS.setItem('seen_onboard','1')}
+
 function showTab(t){
-document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
-event.target.closest('.tab').classList.add('active');
+document.querySelectorAll('.tab').forEach(e=>e.classList.remove('act'));
+[...document.querySelectorAll('.tab')].find(e=>e.textContent.includes({main:'VPN',subs:'Тарифы',aff:'Партнёры'}[t]))?.classList.add('act');
 const safe=document.getElementById('mainScreen');
 if(t==='main'){
-safe.innerHTML=`<div class="head"><h1>DanyanVPN</h1><p>Нажми, чтобы включить</p></div>
-<div class="power-wrap"><div><button class="power" id="power" onclick="toggle()">⚡</button></div>
-<div class="power-label" id="powerLabel">Нажми, чтобы включить</div><div class="power-status" id="powerStatus"></div></div>
-<div class="country-section"><label>Страна</label><div class="country-scroll" id="countryScroll"></div></div>
-<div class="quota-card" id="quotaCard"><div class="quota-ring"><svg width="36" height="36"><circle class="bg" cx="18" cy="18" r="16"/><circle class="fg" id="quotaArc" cx="18" cy="18" r="16" stroke-dasharray="100.53" stroke-dashoffset="0"/></svg></div>
-<div class="quota-right"><div class="quota-gb" id="quotaGb">1.00 GB</div><div class="quota-label" id="quotaLabel">Бесплатно · осталось</div></div></div>
-<div class="tabs"><button class="tab active" onclick="showTab('main')"><span class="icon">🛡</span>VPN</button>
-<button class="tab" onclick="showTab('subs')"><span class="icon">💎</span>Тарифы</button>
-<button class="tab" onclick="showTab('aff')"><span class="icon">👥</span>Партнёры</button></div>`;
-renderCountries();}else if(t==='subs'){
-safe.innerHTML=`<div class="subs-screen">
-<div><h2>💎 Тарифы</h2><p style="font-size:13px;color:var(--text2);margin-bottom:16px">Выбери подходящий план</p></div>
-<div class="subs-card"><div class="subs-price">1 GB</div><div class="subs-desc">🌍 Все страны · ⚡ Max скорость<br>🔒 WireGuard · 📱 iOS, Android, PC</div></div>
-<div class="subs-card highlight"><div class="subs-price">$4.99 <span>/мес</span></div><div class="subs-desc">🚀 Безлимитный трафик · 🌍 Все страны<br>⚡ Приоритетная скорость · 🔒 WireGuard</div>
-<button class="subs-btn buy" onclick="if(tgId){fetch(API+'/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId,action:'subscribe'})}).then(r=>r.json()).then(d=>{if(d.success)toast('Подписка оформлена!','ok')})}else{toast('Открой через бота','err')}">💳 Купить подписку</button></div>
-<div class="subs-card"><div class="subs-price" style="color:var(--orange)">$0.99</div><div class="subs-desc">📦 +1 GB трафика<br>💎 Суммируется · без срока</div>
-<button class="subs-btn gb" onclick="if(tgId){fetch(API+'/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId,action:'buy_gb'})}).then(r=>r.json()).then(d=>{if(d.success)toast('+1 GB добавлено!','ok')})}else{toast('Открой через бота','err')}">📦 Купить 1 GB</button></div>
+safe.innerHTML=`<div class="header"><h1>DanyanVPN</h1><div class="badge" id="statusBadge">Готов</div></div>
+<div class="center" id="centerArea"><button class="power-btn" id="power" onclick="toggle()">⚡</button>
+<div class="power-label" id="powerLabel">Нажми, чтобы включить</div>
+<div class="power-sub" id="powerSub"></div></div>
+<div class="countries"><label>Страна выхода</label><div class="scroll" id="countryScroll"></div></div>
+<div class="quota" id="quotaCard"><div class="ring"><svg width="34" height="34"><circle class="bg" cx="17" cy="17" r="15"/><circle class="fg" id="quotaArc" cx="17" cy="17" r="15" stroke-dasharray="94.25" stroke-dashoffset="0"/></svg></div>
+<div class="qright"><div class="qgb" id="quotaGb">1.00 GB</div><div class="qsub" id="quotaSub">Бесплатно · осталось</div></div></div>
+<div class="tabs"><button class="tab act" onclick="showTab('main')"><span class="ico">🛡</span>VPN</button>
+<button class="tab" onclick="showTab('subs')"><span class="ico">💎</span>Тарифы</button>
+<button class="tab" onclick="showTab('aff')"><span class="ico">👥</span>Партнёры</button></div>`;
+renderCountries();loadUser()
+}else if(t==='subs'){
+safe.innerHTML=`<div class="subs">
+<div><h2>💎 Тарифы</h2><p>Выбери свой план</p></div>
+<div class="scard"><div class="spri">1 GB</div><div class="sdesc">🌍 Все страны · ⚡ Max скорость · 🔒 WireGuard</div></div>
+<div class="scard hl"><div class="spri">$4.99 <sp>/месяц</sp></div><div class="sdesc">🚀 Безлимитный трафик<br>🌍 Любая страна · ⚡ Приоритетная скорость</div>
+<button class="sbtn pr" onclick="(async()=>{if(!tgId)return toast('Открой через бота','er');const r=await af('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId,action:'subscribe'})});const d=await r.json();if(d.success)toast('Подписка оформлена! ✅','ok')})()">💳 Купить подписку</button></div>
+<div class="scard"><div class="spri" style="color:var(--orange)">$0.99</div><div class="sdesc">📦 +1 GB трафика — без срока действия</div>
+<button class="sbtn sec" onclick="(async()=>{if(!tgId)return toast('Открой через бота','er');const r=await af('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId,action:'buy_gb'})});const d=await r.json();if(d.success)toast('+1 GB добавлено! ✅','ok')})()">📦 Купить 1 GB</button></div>
 <div style="flex:1"></div>
-<div class="tabs"><button class="tab" onclick="showTab('main')"><span class="icon">🛡</span>VPN</button>
-<button class="tab active" onclick="showTab('subs')"><span class="icon">💎</span>Тарифы</button>
-<button class="tab" onclick="showTab('aff')"><span class="icon">👥</span>Партнёры</button></div></div>`;
-}else if(t==='aff'){
-safe.innerHTML=`<div class="subs-screen">
-<div><h2>👥 Партнёры</h2><p style="font-size:13px;color:var(--text2);margin-bottom:16px">Приглашай друзей и получай 30%</p></div>
-<div class="subs-card" style="text-align:center">
-<div style="font-size:36px;margin-bottom:8px">🏆</div>
-<div style="font-size:13px;color:var(--text2);line-height:1.6">
-<b style="color:var(--text)">30%</b> от каждой покупки друга<br>
-Выплаты на баланс · Вывод в боте<br>
-Твоя ссылка появится в боте после /start
+<div class="tabs"><button class="tab" onclick="showTab('main')"><span class="ico">🛡</span>VPN</button>
+<button class="tab act" onclick="showTab('subs')"><span class="ico">💎</span>Тарифы</button>
+<button class="tab" onclick="showTab('aff')"><span class="ico">👥</span>Партнёры</button></div></div>`
+}else{
+safe.innerHTML=`<div class="subs">
+<div><h2>👥 Партнёры</h2><p>Приглашай друзей — получай 30%</p></div>
+<div class="scard" style="text-align:center;padding:24px">
+<div style="font-size:40px;margin-bottom:12px">🏆</div>
+<div style="font-size:13px;color:var(--text2);line-height:1.7">
+<b style="color:var(--text);font-size:18px">30%</b><br>
+от каждой покупки друга<br>
+Выплаты на внутренний баланс<br>
+Вывод через бота по запросу
+</div>
+<div style="margin-top:16px;padding:12px;border-radius:10px;background:rgba(255,255,255,.03);font-size:11px;color:var(--text3)">
+Твоя ссылка в боте: /start
 </div></div>
 <div style="flex:1"></div>
-<div class="tabs"><button class="tab" onclick="showTab('main')"><span class="icon">🛡</span>VPN</button>
-<button class="tab" onclick="showTab('subs')"><span class="icon">💎</span>Тарифы</button>
-<button class="tab active" onclick="showTab('aff')"><span class="icon">👥</span>Партнёры</button></div></div>`;
-}}
+<div class="tabs"><button class="tab" onclick="showTab('main')"><span class="ico">🛡</span>VPN</button>
+<button class="tab" onclick="showTab('subs')"><span class="ico">💎</span>Тарифы</button>
+<button class="tab act" onclick="showTab('aff')"><span class="ico">👥</span>Партнёры</button></div></div>`
+}
+}
 
-try{if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.user)tgId=Telegram.WebApp.initDataUnsafe.user.id}catch(e){}
-
-renderCountries();
+// Init
+renderCountries();loadUser();
+if(!LS.getItem('seen_onboard')){document.getElementById('onboard').style.display='flex'}
 </script>
 </body>
 </html>
