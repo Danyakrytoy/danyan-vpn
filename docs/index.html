@@ -5,97 +5,213 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>DanyanVPN</title>
 <style>
-:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--accent:#58a6ff;--green:#3fb950;--red:#f85149;--radius:12px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
-.container{max-width:420px;width:100%}
-.header{text-align:center;padding:24px 0 16px}
-.logo{font-size:36px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;justify-content:center;gap:10px}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#58a6ff,#a371f7);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
-.subtitle{font-size:13px;color:var(--text2);margin-top:4px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
-.card-title{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:12px;font-weight:600}
-.btn-power{width:100%;padding:20px;border:2px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);font-size:17px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s}
-.btn-power:hover{border-color:var(--accent)}
-.btn-power.active{border-color:var(--green);background:rgba(63,185,80,.08);color:var(--green)}
-.btn-power.loading{opacity:.6;pointer-events:none}
-.btn-power .spinner{display:none;width:18px;height:18px;border:2px solid var(--text2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
-.btn-power.loading .spinner{display:inline-block}
-.btn-power.loading .icon-text{display:none}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@keyframes gradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.regions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.region-item{padding:10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px;transition:.15s;background:transparent}
-.region-item:hover{border-color:var(--text2)}
-.region-item.selected{border-color:var(--accent);color:var(--text);background:rgba(88,166,255,.06)}
-.status-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2)}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+@keyframes breath{0%,100%{box-shadow:0 0 20px rgba(88,166,255,.3)}50%{box-shadow:0 0 40px rgba(88,166,255,.5)}}
+
+:root{--bg:#0a0e17;--card:rgba(22,27,34,.6);--card-border:rgba(48,54,61,.4);--text:#e6edf3;--text2:rgba(139,148,158,.8);--accent:#58a6ff;--green:#3fb950;--red:#f85149;--purple:#a371f7;--radius:16px;--radius-sm:10px}
+
+body{
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;
+display:flex;align-items:center;justify-content:center;
+overflow-x:hidden;
+}
+body::before{
+content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+background:linear-gradient(135deg,#0a0e17 0%,#0d1b2a 30%,#1a0a2e 60%,#0a0e17 100%);
+background-size:400% 400%;animation:gradient 15s ease infinite;
+z-index:-2;
+}
+body::after{
+content:'';position:fixed;top:-50%;left:-50%;right:-50%;bottom:-50%;
+background:radial-gradient(ellipse at 20% 50%,rgba(88,166,255,.06) 0%,transparent 50%),
+radial-gradient(ellipse at 80% 20%,rgba(163,113,247,.06) 0%,transparent 50%),
+radial-gradient(ellipse at 50% 80%,rgba(63,185,80,.04) 0%,transparent 50%);
+z-index:-1;
+}
+
+.container{max-width:420px;width:100%;padding:20px 16px;display:flex;flex-direction:column;gap:12px}
+
+/* Header */
+.header{text-align:center;padding:8px 0 4px;animation:slideUp .5s ease}
+.logo{font-size:32px;font-weight:700;letter-spacing:-.5px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#58a6ff,#a371f7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;box-shadow:0 4px 15px rgba(88,166,255,.3);animation:breath 3s ease-in-out infinite}
+.subtitle{font-size:12px;color:var(--text2);letter-spacing:.3px}
+
+/* Cards */
+.card{
+background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border:1px solid var(--card-border);border-radius:var(--radius);padding:16px;
+animation:slideUp .5s ease;
+}
+.card:nth-child(2){animation-delay:.1s}
+.card:nth-child(3){animation-delay:.15s}
+.card:nth-child(4){animation-delay:.2s}
+.card-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:12px;font-weight:600}
+
+/* Power Toggle */
+.power-wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.power-label{font-size:14px;font-weight:600;color:var(--text2)}
+.power-label.active{color:var(--green)}
+.toggle{position:relative;width:56px;height:30px;border-radius:15px;background:var(--card-border);cursor:pointer;transition:.3s;flex-shrink:0}
+.toggle.active{background:var(--green);box-shadow:0 0 20px rgba(63,185,80,.3)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.35s cubic-bezier(.68,-.55,.265,1.55);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.toggle.active .toggle-knob{left:29px;background:#fff}
+.toggle.loading{pointer-events:none;opacity:.7}
+.toggle.loading .toggle-knob{background:var(--accent);animation:pulse 1s ease-in-out infinite}
+
+/* Status */
+.status-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);padding:2px 0}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
 .dot.off{background:var(--red)}
-.dot.on{background:var(--green);box-shadow:0 0 8px rgba(63,185,80,.4)}
+.dot.on{background:var(--green);box-shadow:0 0 12px rgba(63,185,80,.5)}
 .dot.wait{background:#d29922;animation:pulse 1s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.config-box{display:none;margin-top:0}
-.config-box.show{display:block}
-.config-text{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:12px;font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;font-size:10px;line-height:1.5;color:var(--text2);max-height:160px;overflow-y:auto;word-break:break-all;white-space:pre-wrap;margin-top:8px}
-.btn-group{display:flex;gap:8px;margin-top:10px}
-.btn-group button{flex:1;padding:10px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
-.btn-copy{background:rgba(88,166,255,.12);color:var(--accent)}
-.btn-copy:hover{background:rgba(88,166,255,.2)}
-.btn-download{background:linear-gradient(135deg,#58a6ff,#a371f7);color:#fff}
-.btn-download:hover{opacity:.9}
-.error{display:none;padding:10px 14px;background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.2);border-radius:8px;font-size:13px;color:var(--red);margin-bottom:12px;text-align:center}
-.error.show{display:block}
-.success{display:none;padding:10px 14px;background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);border-radius:8px;font-size:13px;color:var(--green);margin-bottom:12px;text-align:center}
-.success.show{display:block}
-.footer{text-align:center;font-size:11px;color:var(--text2);padding:16px 0 32px;opacity:.5}
+.status-text{font-weight:500}
+.status-ip{font-size:13px;color:var(--accent);margin-left:auto;font-weight:600;font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace}
+
+/* Country Grid */
+.countries{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.country{
+padding:10px 6px;border:1px solid var(--card-border);border-radius:var(--radius-sm);
+cursor:pointer;font-size:11px;color:var(--text2);text-align:center;
+transition:all .2s;background:transparent;position:relative;overflow:hidden;
+}
+.country:hover{border-color:var(--accent);color:var(--text);background:rgba(88,166,255,.04);transform:translateY(-1px)}
+.country:active{transform:scale(.96)}
+.country.selected{border-color:var(--accent);color:#fff;background:rgba(88,166,255,.1);box-shadow:0 0 20px rgba(88,166,255,.1)}
+.country.selected::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(88,166,255,.1),transparent 60%);border-radius:inherit;pointer-events:none}
+.country-flag{font-size:22px;display:block;margin-bottom:4px;animation:float 4s ease-in-out infinite}
+.country:nth-child(2) .country-flag{animation-delay:.2s}
+.country:nth-child(3) .country-flag{animation-delay:.4s}
+.country:nth-child(4) .country-flag{animation-delay:.6s}
+.country:nth-child(5) .country-flag{animation-delay:.8s}
+.country:nth-child(6) .country-flag{animation-delay:1s}
+.country-name{display:block;font-weight:600;margin-bottom:1px}
+.country-desc{display:block;font-size:9px;opacity:.5;line-height:1.2}
+
+/* Config */
+.config-box{display:none;overflow:hidden;transition:all .4s ease}
+.config-box.show{display:block;animation:slideUp .3s ease}
+.config-text{
+background:rgba(0,0,0,.4);border:1px solid var(--card-border);border-radius:var(--radius-sm);
+padding:12px;font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;
+font-size:10px;line-height:1.5;color:var(--text2);max-height:150px;overflow-y:auto;
+word-break:break-all;white-space:pre-wrap;margin-top:8px;
+}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.btn-row button{flex:1;padding:11px;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-copy{background:rgba(88,166,255,.1);color:var(--accent)}
+.btn-copy:hover{background:rgba(88,166,255,.18)}
+.btn-copy:active{transform:scale(.97)}
+.btn-download{background:linear-gradient(135deg,#58a6ff,#a371f7);color:#fff;box-shadow:0 4px 15px rgba(88,166,255,.25)}
+.btn-download:hover{opacity:.9;box-shadow:0 4px 20px rgba(88,166,255,.35);transform:translateY(-1px)}
+.btn-download:active{transform:scale(.97)}
+
+/* IP Info */
+.ip-info{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.ip-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+.ip-row .label{color:var(--text2);opacity:.6;min-width:44px}
+.ip-row .value{font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;color:var(--text);font-weight:500}
+.ip-row .value.green{color:var(--green)}
+.ip-divider{border:none;border-top:1px solid var(--card-border);margin:6px 0;opacity:.5}
+
+/* Toasts */
+.toast{
+position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+padding:12px 20px;border-radius:12px;font-size:13px;font-weight:500;
+opacity:0;transition:all .4s cubic-bezier(.68,-.55,.265,1.55);z-index:100;
+pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3);color:var(--green);backdrop-filter:blur(10px)}
+.toast.error{background:rgba(248,81,73,.15);border:1px solid rgba(248,81,73,.3);color:var(--red);backdrop-filter:blur(10px)}
+
+/* Skeleton */
+.skeleton{background:linear-gradient(90deg,var(--card-border) 25%,rgba(48,54,61,.2) 50%,var(--card-border) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:4px}
+.skeleton-text{height:12px;width:60%;margin-bottom:8px}
+.skeleton-ip{height:14px;width:40%}
+
+/* Footer */
+.footer{text-align:center;font-size:10px;color:var(--text2);padding:12px 0 4px;opacity:.4;letter-spacing:.5px}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--card-border);border-radius:2px}
 </style>
 </head>
 <body>
+<div class="toast" id="toast"></div>
 <div class="container">
 <div class="header">
-<div class="logo"><span class="logo-icon">&#x1F6E1;</span>DanyanVPN</div>
-<div class="subtitle">Free &bull; Unlimited &bull; WireGuard</div>
+<div class="logo"><span class="logo-icon">🛡</span>DanyanVPN</div>
+<div class="subtitle">Free VPN · Cloudflare Warp · WireGuard</div>
 </div>
 
-<div class="error" id="error"></div>
-<div class="success" id="success"></div>
-
-<div class="card">
-<div class="card-title">&#x1F50C; Управление</div>
-<button class="btn-power" id="powerBtn" onclick="toggle()">
-<span class="icon-text">&#x26A1; Подключиться</span>
-<span class="spinner"></span>
-</button>
+<div class="card" style="animation-delay:.05s">
+<div class="card-title">⚡ Управление</div>
+<div class="power-wrap">
+<span class="power-label" id="powerLabel">Подключиться</span>
+<div class="toggle" id="toggleBtn" onclick="toggle()">
+<div class="toggle-knob"></div>
+</div>
+</div>
+<div class="status-row" style="margin-top:12px">
+<span class="dot off" id="statusDot"></span>
+<span class="status-text" id="statusText">Отключено</span>
+<span class="status-ip" id="statusIp"></span>
+</div>
 </div>
 
-<div class="card">
-<div class="card-title">&#x1F310; Регион</div>
-<div class="regions" id="regionList"></div>
+<div class="card" style="animation-delay:.1s">
+<div class="card-title">🌍 Страна</div>
+<div class="countries" id="countryList"></div>
 </div>
 
-<div class="card">
-<div class="status-row"><span class="dot off" id="statusDot"></span><span id="statusText">Отключено</span></div>
+<div class="card" style="animation-delay:.15s">
+<div class="card-title">📍 Мой IP</div>
+<div class="ip-info" id="ipInfo">
+<div class="ip-row"><span class="label">IP</span><span class="value" id="myIp">—</span></div>
+<div class="ip-row"><span class="label">Страна</span><span class="value" id="myCountry">—</span></div>
+<hr class="ip-divider">
+<div class="ip-row" style="font-size:11px;color:var(--text2);opacity:.6"><span>Проверка каждые 30 секунд</span></div>
+</div>
 </div>
 
 <div class="card config-box" id="configBox">
-<div class="card-title">&#x1F511; Конфиг</div>
+<div class="card-title">🔑 Конфиг</div>
 <div class="config-text" id="configText"></div>
-<div class="btn-group">
-<button class="btn-copy" onclick="copyCfg()">&#x1F4CB; Копировать</button>
-<button class="btn-download" onclick="dlCfg()">&#x1F4E5; Скачать</button>
+<div class="btn-row">
+<button class="btn-copy" onclick="copyCfg()">📋 Копировать</button>
+<button class="btn-download" onclick="dlCfg()">📥 Скачать</button>
 </div>
 </div>
 
-<div class="footer">DanyanVPN v1 &bull; Cloudflare Warp</div>
+<div class="footer">DanyanVPN · Cloudflare Warp · v2</div>
 </div>
 
 <script>
 const params=new URLSearchParams(window.location.search);
 const API=params.get('api')||window.location.origin;
 
-const REGIONS={
-auto:{n:'Auto',f:'&#x1F30D;'},eu:{n:'Europe',f:'&#x1F1EA;&#x1F1FA;'},
-asia:{n:'Asia',f:'&#x1F1EF;&#x1F1F5;'},us:{n:'USA',f:'&#x1F1FA;&#x1F1F8;'}
+const COUNTRIES={
+auto:{n:'Auto',f:'🌍',d:'Fastest'},
+us:{n:'USA',f:'🇺🇸',d:'Los Angeles'},
+jp:{n:'Japan',f:'🇯🇵',d:'Tokyo'},
+de:{n:'Germany',f:'🇩🇪',d:'Frankfurt'},
+nl:{n:'Netherlands',f:'🇳🇱',d:'Amsterdam'},
+sg:{n:'Singapore',f:'🇸🇬',d:'Singapore'},
+gb:{n:'UK',f:'🇬🇧',d:'London'},
+au:{n:'Australia',f:'🇦🇺',d:'Sydney'},
+br:{n:'Brazil',f:'🇧🇷',d:'São Paulo'},
 };
+
 let sel='auto',cfg='',on=false;
 
 function apifetch(path,opts){
@@ -104,66 +220,88 @@ h['bypass-tunnel-reminder']='1';
 return fetch(API+path,{...opts,headers:h});
 }
 
+function toast(msg,type){
+const t=document.getElementById('toast');
+t.textContent=msg;t.className='toast '+type+' show';
+clearTimeout(t._hide);t._hide=setTimeout(()=>t.className='toast',2500);
+}
+
 function render(){
-const el=document.getElementById('regionList');
+const el=document.getElementById('countryList');
 el.innerHTML='';
-for(const[k,v]of Object.entries(REGIONS)){
+for(const[k,v]of Object.entries(COUNTRIES)){
 const d=document.createElement('div');
-d.className='region-item'+(k===sel?' selected':'');
-d.innerHTML=v.f+' '+v.n;
+d.className='country'+(k===sel?' selected':'');
+d.innerHTML='<span class="country-flag">'+v.f+'</span><span class="country-name">'+v.n+'</span><span class="country-desc">'+v.d+'</span>';
 d.onclick=()=>{if(!on)select(k)};
 el.appendChild(d);
 }}
 
 function select(k){
 sel=k;
-document.querySelectorAll('.region-item').forEach((e,i)=>{
-e.className='region-item'+(Object.keys(REGIONS)[i]===k?' selected':'');
+document.querySelectorAll('.country').forEach((e,i)=>{
+const key=Object.keys(COUNTRIES)[i];
+e.className='country'+(key===k?' selected':'');
 });
-hideError();
 }
 
-function setStatus(state,text){
+function setStatus(state,text,ip){
 document.getElementById('statusDot').className='dot '+state;
 document.getElementById('statusText').textContent=text;
+if(ip)document.getElementById('statusIp').textContent=ip;
+else if(state==='off')document.getElementById('statusIp').textContent='';
 }
 
-function showError(m){
-document.getElementById('error').innerHTML='&#x274C; '+m;
-document.getElementById('error').classList.add('show');
+function togglePower(active){
+const t=document.getElementById('toggleBtn');
+const l=document.getElementById('powerLabel');
+t.className='toggle'+(active?' active':'');
+l.textContent=active?'Подключено':'Подключиться';
+l.className='power-label'+(active?' active':'');
 }
-function hideError(){document.getElementById('error').classList.remove('show');}
-function showSuccess(){
-document.getElementById('success').classList.add('show');
-setTimeout(()=>document.getElementById('success').classList.remove('show'),3000);
+
+function setMyIp(ip,country,emoji){
+document.getElementById('myIp').textContent=ip||'—';
+document.getElementById('myCountry').textContent=(emoji||'')+' '+(country||'—');
+document.getElementById('myIp').className='value green';
+}
+
+function showConfig(text){
+document.getElementById('configText').textContent=text;
+document.getElementById('configBox').classList.add('show');
 }
 
 async function toggle(){
-const btn=document.getElementById('powerBtn');
-if(on){on=false;btn.classList.remove('active');btn.querySelector('.icon-text').innerHTML='&#x26A1; Подключиться';setStatus('off','Отключено');return}
-btn.classList.add('loading');btn.querySelector('.icon-text').textContent='';setStatus('wait','Генерирую...');hideError();
+const t=document.getElementById('toggleBtn');
+if(on){
+on=false;togglePower(false);setStatus('off','Отключено');
+cfg='';document.getElementById('configBox').classList.remove('show');
+toast('VPN отключён','success');
+return;
+}
+t.classList.add('loading');setStatus('wait','Генерирую...');
 try{
 const r=await apifetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({region:sel})});
 const d=await r.json();
 if(!d.success)throw new Error(d.error||'Ошибка');
 cfg=d.config;on=true;
-btn.classList.remove('loading');btn.classList.add('active');
-btn.querySelector('.icon-text').innerHTML='&#x1F510; Подключено';
-setStatus('on','Подключено &bull; '+REGIONS[sel].f+' '+REGIONS[sel].n);
-document.getElementById('configText').textContent=cfg;
-document.getElementById('configBox').classList.add('show');
-showSuccess();
+t.classList.remove('loading');togglePower(true);
+setStatus('on','Подключено · '+COUNTRIES[sel].f+' '+COUNTRIES[sel].n);
+showConfig(cfg);
+toast('VPN подключён! ✅','success');
+checkMyIp();
 }catch(e){
-btn.classList.remove('loading');btn.querySelector('.icon-text').innerHTML='&#x26A1; Подключиться';
-setStatus('off','Ошибка');showError(e.message||'Не удалось получить конфиг');
+t.classList.remove('loading');togglePower(false);
+setStatus('off','Ошибка');
+toast(e.message||'Не удалось подключиться','error');
 }}
 
 function copyCfg(){
 if(!cfg)return;
-navigator.clipboard.writeText(cfg).then(()=>{
-const b=document.querySelector('.btn-copy');b.textContent='&#x2705; Скопировано';
-setTimeout(()=>b.innerHTML='&#x1F4CB; Копировать',2000);
-}).catch(()=>{const t=document.createElement('textarea');t.value=cfg;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()});
+navigator.clipboard.writeText(cfg).then(()=>toast('Скопировано! 📋','success')).catch(()=>{
+const t=document.createElement('textarea');t.value=cfg;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
+toast('Скопировано! 📋','success');
+});
 }
 
 function dlCfg(){
@@ -171,9 +309,26 @@ if(!cfg)return;
 const b=new Blob([cfg],{type:'text/plain'}),u=URL.createObjectURL(b);
 const a=document.createElement('a');a.href=u;a.download='DanyanVPN_'+sel+'.conf';a.click();
 URL.revokeObjectURL(u);
+toast('Файл скачан 📥','success');
+}
+
+async function checkMyIp(){
+try{
+const c=new AbortController();setTimeout(()=>c.abort(),5000);
+const r=await apifetch('/api/check-ip',{signal:c.signal});
+const d=await r.json();
+if(d.success){
+setMyIp(d.ip,(d.city?d.country+', '+d.city:d.country),d.emoji);
+}}catch(e){}
+}
+
+function startIpPoller(){
+checkMyIp();
+setInterval(checkMyIp,30000);
 }
 
 render();
+startIpPoller();
 </script>
 </body>
 </html>
