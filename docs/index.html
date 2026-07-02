@@ -2,202 +2,198 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover,viewport-fit=cover">
 <title>DanyanVPN</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#000;--text:#fff;--text2:rgba(255,255,255,.55);--text3:rgba(255,255,255,.2);--accent:#0a84ff;--green:#30d158;--orange:#ff9f0a;--red:#ff453a;--radius:14px}
-body{font-family:-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;background:radial-gradient(ellipse at 50% 20%,#0a1a2e 0%,#000 60%)}
+:root{--bg:#000;--text:#fff;--t2:rgba(255,255,255,.5);--t3:rgba(255,255,255,.15);--accent:#0a84ff;--green:#30d158;--orange:#ff9f0a;--red:#ff453a;--rad:14px}
+body{font-family:-apple-system,'SF Pro Text','Helvetica Neue',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow:hidden;-webkit-font-smoothing:antialiased;background:radial-gradient(ellipse at 50% 20%,#0a1a2e 0%,#000 60%)}
 .safe{height:100dvh;display:flex;flex-direction:column;overflow:hidden;padding:0 20px}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:50px;padding-bottom:90px}
-.header{display:flex;justify-content:space-between;align-items:center;position:absolute;top:0;left:20px;right:20px;height:50px;z-index:2}
-.header h1{font-size:22px;font-weight:700;letter-spacing:-.3px}
-.badge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;background:rgba(255,255,255,.05);color:var(--text2)}
-.badge.on{background:rgba(48,209,88,.12);color:var(--green)}
-.center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;min-height:calc(100dvh - 230px);animation:fade .6s ease}
-.power{width:96px;height:96px;border-radius:50%;border:none;outline:none;-webkit-appearance:none;cursor:pointer;
-background:rgba(255,255,255,.05);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
-border:1.5px solid rgba(255,255,255,.1);font-size:34px;
-transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 40px rgba(0,0,0,.5)}
-.power:active{transform:scale(.82)}
-.power.on{background:rgba(48,209,88,.1);border-color:rgba(48,209,88,.25);box-shadow:0 0 30px rgba(48,209,88,.1)}
-.power.on::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(48,209,88,.15);animation:breathe 2s ease infinite}
-@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.15)}50%{box-shadow:0 0 0 20px rgba(48,209,88,0)}}
-.plabel{font-size:14px;font-weight:500;color:var(--text2);transition:.3s;text-align:center}
-.plabel.on{color:var(--green)}
-.psub{font-size:12px;color:var(--text3);min-height:18px;text-align:center}
-.countries{width:100%;margin-bottom:14px;animation:fade .6s ease .15s both}
-.countries label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-left:4px;margin-bottom:8px;display:block}
-.cscroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px;scrollbar-width:none}
-.cscroll::-webkit-scrollbar{display:none}
-.pill{-webkit-appearance:none;border:none;outline:none;flex-shrink:0;padding:10px 18px;border-radius:24px;font-size:13px;font-family:inherit;font-weight:500;
-background:rgba(255,255,255,.04);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
-border:1px solid rgba(255,255,255,.06);color:var(--text2);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
+.top{display:flex;justify-content:space-between;align-items:center;padding-top:54px;padding-bottom:4px}
+.top h1{font-size:20px;font-weight:700;letter-spacing:-.3px}
+.badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;background:rgba(255,255,255,.04);color:var(--t2)}
+.badge.on{background:rgba(48,209,88,.1);color:var(--green)}
+.mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.btn{width:92px;height:92px;border-radius:50%;border:none;outline:none;-webkit-appearance:none;cursor:pointer;position:relative;
+background:rgba(255,255,255,.04);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+border:1px solid rgba(255,255,255,.08);font-size:32px;
+transition:all .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.btn:active{transform:scale(.84)}
+.btn.on{background:rgba(48,209,88,.08);border-color:rgba(48,209,88(.2);box-shadow:0 0 25px rgba(48,209,88,.08)}
+.btn.on::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid rgba(48,209,88,.12);animation:breathe 2s ease infinite}
+.btn.busy{background:rgba(255,159,10,.06);border-color:rgba(255,159,10(.12);pointer-events:none;animation:pulse 1s ease infinite}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.06);opacity:.5}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.lbl{font-size:14px;font-weight:500;color:var(--t2);transition:.3s;text-align:center}
+.lbl.on{color:var(--green)}
+.lbl.busy{color:var(--orange)}
+.sub{font-size:12px;color:var(--t3);min-height:18px;text-align:center;font-family:'SF Mono',monospace}
+.cntr{width:100%;margin-bottom:12px}
+.cntr label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin:0 0 6px 4px;display:block}
+.cs{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px;scrollbar-width:none}
+.cs::-webkit-scrollbar{display:none}
+.pill{-webkit-appearance:none;border:none;outline:none;flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:12px;font-family:inherit;font-weight:500;
+background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);color:var(--t2);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
 .pill:active{transform:scale(.88)}
-.pill.sel{background:rgba(10,132,255,.1);border-color:rgba(10,132,255,.2);color:var(--accent)}
-.quota{width:100%;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--radius);background:rgba(255,255,255,.03);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);border:1px solid rgba(255,255,255,.05);animation:fade .6s ease .2s both;margin-bottom:8px}
-.ring{width:34px;height:34px;flex-shrink:0}
+.pill.sel{background:rgba(10,132,255,.08);border-color:rgba(10,132,255(.15);color:var(--accent)}
+.qc{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--rad);background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);margin-bottom:8px}
+.ring{width:30px;height:30px;flex-shrink:0}
 .ring svg{transform:rotate(-90deg)}
-.ring .bg{fill:none;stroke:rgba(255,255,255,.05);stroke-width:3}
+.ring .bg{fill:none;stroke:rgba(255,255,255,.04);stroke-width:3}
 .ring .fg{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s}
-.qright{flex:1}
-.qgb{font-size:16px;font-weight:700;letter-spacing:-.3px}
-.qsub{font-size:10px;color:var(--text2);margin-top:1px}
-.stat{width:100%;padding:12px 16px;border-radius:var(--radius);margin-bottom:8px;font-size:12px;line-height:1.6;animation:fade .6s ease}
-.stat.ok{background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.1)}
-.stat.off{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04)}
-.stat .sip{font-family:'SF Mono',monospace;font-size:13px;color:var(--accent);margin:2px 0}
-.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;gap:6px;padding:6px 20px 30px;justify-content:center;z-index:10;animation:fade .6s ease .25s both}
-.tab{-webkit-appearance:none;border:none;outline:none;font-family:inherit;flex:1;max-width:104px;padding:8px 0;border-radius:10px;font-size:10px;font-weight:600;
-background:rgba(255,255,255,.03);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
-border:1px solid rgba(255,255,255,.05);color:var(--text3);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:.25s}
-.tab .ico{font-size:18px}
+.qr{flex:1}
+.qg{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.ql{font-size:10px;color:var(--t2);margin-top:1px}
+.st{width:100%;padding:10px 14px;border-radius:var(--rad);margin-bottom:6px;font-size:12px;line-height:1.5}
+.st.on{background:rgba(48,209,88,.05);border:1px solid rgba(48,209,88(.08)}
+.st.off{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.03)}
+.st .ip{font-family:'SF Mono',monospace;font-size:12px;color:var(--accent);margin:1px 0}
+.tabbar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:0;padding:4px 20px 26px;z-index:10}
+.tab{-webkit-appearance:none;border:none;outline:none;font-family:inherit;padding:6px 16px;border-radius:8px;font-size:12px;font-weight:500;
+background:transparent;color:var(--t3);cursor:pointer;transition:.2s;display:flex;align-items:center;gap:4px}
+.tab .ico{font-size:16px}
 .tab:active{transform:scale(.92)}
-.tab.act{background:rgba(10,132,255,.08);border-color:rgba(10,132,255,.15);color:var(--accent)}
-.toast-wrap{position:fixed;top:0;left:0;right:0;z-index:99;pointer-events:none;padding:54px 20px 0;text-align:center}
-.toast{display:inline-block;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:500;backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);opacity:0;transform:translateY(-10px) scale(.95);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
-.toast.sh{opacity:1;transform:translateY(0) scale(1)}
-.toast.ok{background:rgba(48,209,88,.12);border:1px solid rgba(48,209,88,.15);color:var(--green)}
-.toast.er{background:rgba(255,69,58,.12);border:1px solid rgba(255,69,58,.15);color:var(--red)}
-.subs h2{font-size:26px;font-weight:700;margin-bottom:2px}
-.subs>p{font-size:13px;color:var(--text2);margin-bottom:18px}
-.scard{border-radius:var(--radius);padding:16px;margin-bottom:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px)}
-.scard.hl{background:rgba(10,132,255,.05);border-color:rgba(10,132,255,.12)}
-.spri{font-size:26px;font-weight:700}
-.spri sp{font-size:13px;font-weight:400;color:var(--text2)}
-.sdesc{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.6}
-.sbtn{-webkit-appearance:none;border:none;font-family:inherit;width:100%;padding:14px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;margin-top:12px}
-.sbtn:active{transform:scale(.97)}
-.sbtn.pr{background:var(--accent);color:#fff}
-.sbtn.sec{background:rgba(255,159,10,.08);color:var(--orange);border:1px solid rgba(255,159,10,.1)}
-@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.tab.act{color:var(--accent)}
+.ts{position:fixed;top:0;left:0;right:0;z-index:99;pointer-events:none;padding:50px 20px 0;text-align:center}
+.tt{display:inline-block;padding:8px 18px;border-radius:10px;font-size:12px;font-weight:500;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);opacity:0;transform:translateY(-8px) scale(.95);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.tt.sh{opacity:1;transform:translateY(0) scale(1)}
+.tt.ok{background:rgba(48,209,88(.1);border:1px solid rgba(48,209,88(.12);color:var(--green)}
+.tt.er{background:rgba(255,69,58(.1);border:1px solid rgba(255,69,58(.12);color:var(--red)}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:70px}
+.subs h2{font-size:24px;font-weight:700;margin-bottom:2px}
+.subs>p{font-size:13px;color:var(--t2);margin-bottom:16px}
+.sc{border-radius:var(--rad);padding:14px;margin-bottom:8px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04)}
+.sc.hl{background:rgba(10,132,255,.04);border-color:rgba(10,132,255(.08)}
+.sp{font-size:24px;font-weight:700}
+.sp sp{font-size:12px;font-weight:400;color:var(--t2)}
+.sd{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.5}
+.sb{-webkit-appearance:none;border:none;font-family:inherit;width:100%;padding:12px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;margin-top:10px}
+.sb:active{transform:scale(.97)}
+.sb.pr{background:var(--accent);color:#fff}
+.sb.se{background:rgba(255,159,10,.06);color:var(--orange);border:1px solid rgba(255,159,10(.08)}
 </style>
 </head>
 <body>
-<div class="toast-wrap"><div class="toast" id="toast"></div></div>
-<div class="safe" id="root">
-<div class="header"><h1>DanyanVPN</h1><div class="badge" id="badge">Готов</div></div>
-<div class="scroll" id="content"><div id="page"></div></div>
-<div class="tabs" id="tabs">
-<button class="tab act" data-tab="main"><span class="ico">🛡</span>VPN</button>
-<button class="tab" data-tab="subs"><span class="ico">💎</span>Тарифы</button>
-<button class="tab" data-tab="aff"><span class="ico">👥</span>Партнёры</button>
+<div class="ts"><div class="tt" id="tt"></div></div>
+<div class="safe">
+<div class="top"><h1>DanyanVPN</h1><div class="badge" id="bdg">Готов</div></div>
+<div class="scroll" id="sc"><div id="pg"></div></div>
+<div class="tabbar" id="tb">
+<button class="tab act" data-t="main"><span class="ico">🛡</span>VPN</button>
+<button class="tab" data-t="subs"><span class="ico">💎</span>Тарифы</button>
+<button class="tab" data-t="aff"><span class="ico">👥</span>Партнёры</button>
 </div>
 </div>
 
 <script>
-const params=new URLSearchParams(window.location.search);
-const API=params.get('api')||window.location.origin;
-const KEYS=['auto','us','jp','de','nl','sg','gb','au','br'];
-const NAMES=['🌍 Auto','🇺🇸 USA','🇯🇵 Japan','🇩🇪 Germany','🇳🇱 Netherlands','🇸🇬 Singapore','🇬🇧 UK','🇦🇺 Australia','🇧🇷 Brazil'];
-let sel='auto',on=false,tgId='',busy=false;
+const P=new URLSearchParams(window.location.search);
+const API=P.get('api')||window.location.origin;
+const KS=['auto','us','jp','de','nl','sg','gb','au','br'];
+const NS=['🌍 Auto','🇺🇸 USA','🇯🇵 Japan','🇩🇪 Germany','🇳🇱 NL','🇸🇬 SG','🇬🇧 UK','🇦🇺 AU','🇧🇷 BR'];
+let sel='auto',on=false,tg=0,bz=false;
 const LS=window.localStorage;
 
-function af(p,o){const h=o?.headers||{};h['bypass-tunnel-reminder']='1';return fetch(API+p,{...o,headers:h})}
-function toast(m,t){const e=document.querySelector('.toast');e.textContent=m;e.className='toast '+t+' sh';clearTimeout(e._h);e._h=setTimeout(()=>e.className='toast',2600)}
+const _f=(p,o)=>{const h=o?.headers||{};h['bypass-tunnel-reminder']='1';return fetch(API+p,{...o,headers:h})};
+const _t=(m,t)=>{const e=document.getElementById('tt');e.textContent=m;e.className='tt '+t+' sh';clearTimeout(e._h);e._h=setTimeout(()=>e.className='tt',2200)};
 
-function setPower(active,loading){
-on=active;const p=document.getElementById('power');
-if(!p)return;
-p.className='power'+(active?' on':'')+(loading?'':'');
-p.textContent=active?'🔒':'⚡';
-const l=document.getElementById('plabel');
-if(l){l.textContent=active?'Защищено':loading?'Подключение...':'Нажми, чтобы включить';l.className='plabel'+(active?' on':'')}
-const b=document.getElementById('badge');
-if(b){b.textContent=active?'Защищено':'Готов';b.className='badge'+(active?' on':'')}
+function sp(a,loading){
+on=a;const b=document.getElementById('btn');if(!b)return;
+b.className='btn'+(a?' on':'')+(loading&&!a?' busy':'');
+b.textContent=a?'🔒':loading?'':'⚡';
+const l=document.getElementById('lbl');
+if(l){l.textContent=a?'Защищено':loading?'Подключаюсь...':'Нажми чтобы включить';l.className='lbl'+(a?' on':'')+(loading?' busy':'')}
+const d=document.getElementById('bdg');
+if(d){d.textContent=a?'Защищено':loading?'...':'Готов';d.className='badge'+(a?' on':'')}
 }
 
-async function toggleVpn(){
-if(busy)return;
+async function tg(){
+if(bz)return;
 if(on){
-busy=true;setPower(false,true);
-try{await af('/api/vpn/off',{method:'POST',timeout:8000});toast('VPN отключён','ok')}catch(e){toast('Ошибка','er')}
-busy=false;updateStatus();
-}else{
-busy=true;setPower(false,true);
-try{await af('/api/vpn/on',{method:'POST',timeout:8000});toast('VPN включён ✅','ok')}catch(e){toast('Ошибка','er')}
-busy=false;updateStatus();
+sp(false,false);_t('VPN отключён','ok');
+return;
 }
-}
-
-async function updateStatus(){
+bz=true;sp(false,true);
 try{
-const r=await af('/api/vpn/status',{timeout:5});const d=await r.json();
-const r2=await af('/api/myip',{timeout:5});const d2=await r2.json();
-const ip=d2.success?d2.ip:'—';
-const connected=d.connected;
-on=connected;const st=document.getElementById('stat');
+await _f('/api/vpn/on',{method:'POST',timeout:8000});
+_t('VPN включён ✅','ok');
+}catch(e){_t('Ошибка подключения','er')}
+bz=false;
+upd();
+}
+
+async function upd(){
+try{
+const s=await _f('/api/vpn/status',{timeout:5});const sd=await s.json();
+const i=await _f('/api/myip',{timeout:5});const id=await i.json();
+const ip=id.success?id.ip:'—';const c=sd.connected;
+sp(c,false);const st=document.getElementById('st');
 if(st){
-st.className='stat'+(connected?' ok':' off');
-st.innerHTML=connected
-?`<b>🛡 Защищено</b><div class="sip">${ip}</div><div style="color:var(--green);font-size:11px">Трафик через DanyanVPN (США)</div>`
-:`<b>⛔ Не защищено</b><div class="sip">${ip}</div><div style="color:var(--text3);font-size:11px">Прямое соединение</div>`;
+st.className='st'+(c?' on':' off');
+st.innerHTML=c?`🛡 <b>Защищено</b><div class="ip">${ip}</div><span style="color:var(--green);font-size:11px">DanyanVPN · США</span>`
+:`⛔ <b>Не защищено</b><div class="ip">${ip}</div>`;
 }
-setPower(connected);
-const psub=document.getElementById('psub');
-if(psub)psub.textContent=connected?'IP: '+ip:'Нажми кнопку для подключения';
-}catch(e){setPower(false)}
+const sb=document.getElementById('psub');if(sb)sb.textContent=c?'IP: '+ip:'Нажми для включения';
+}catch(e){sp(false,false)}
 }
 
-function renderCountries(){
-const el=document.getElementById('cscroll');if(!el)return;el.innerHTML='';
-KEYS.forEach((k,i)=>{
-const b=document.createElement('button');b.className='pill'+(k===sel?' sel':'');b.textContent=NAMES[i];b.onclick=()=>{sel=k;renderCountries()};el.appendChild(b)});
+function rc(){
+const e=document.getElementById('cs');if(!e)return;e.innerHTML='';
+KS.forEach((k,i)=>{
+const b=document.createElement('button');b.className='pill'+(k===sel?' sel':'');b.textContent=NS[i];b.onclick=()=>{sel=k;rc()};e.appendChild(b)});
 }
 
-function updQuota(gb,hasSub){
-const pct=Math.min(100,Math.round(gb/1*100));
-const arc=document.getElementById('qarc');if(!arc)return;
-const dash=94.25-(94.25*pct/100);
-arc.setAttribute('stroke-dashoffset',dash);arc.setAttribute('stroke',hasSub?'#30d158':pct>20?'#0a84ff':'#ff9f0a');
-document.getElementById('qgb').textContent=hasSub?'∞':gb.toFixed(2)+' GB';
-document.getElementById('qsub').textContent=hasSub?'Премиум · безлимит':'Бесплатно · осталось';
+function uq(gb,hs){
+const p=Math.min(100,Math.round(gb/1*100));
+const a=document.getElementById('qa');if(!a)return;
+const d=94.25-(94.25*p/100);
+a.setAttribute('stroke-dashoffset',d);a.setAttribute('stroke',hs?'#30d158':p>20?'#0a84ff':'#ff9f0a');
+document.getElementById('qg').textContent=hs?'∞':gb.toFixed(2)+' GB';
+document.getElementById('ql').textContent=hs?'Премиум · безлимит':'Бесплатно · осталось';
 }
 
-async function loadUser(){
-try{if(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initDataUnsafe&&Telegram.WebApp.initDataUnsafe.user)tgId=Telegram.WebApp.initDataUnsafe.user.id}catch(e){}
-if(!tgId){updQuota(1,false);return}
-const r=await af('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId})});
-const d=await r.json();if(d.remaining_gb!==undefined)updQuota(d.remaining_gb,d.has_subscription);
+async function lu(){
+try{tg=(Telegram?.WebApp?.initDataUnsafe?.user?.id)||parseInt(P.get('tg'))||0}catch(e){}
+if(!tg){uq(1,false);return}
+const r=await _f('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tg})});
+const d=await r.json();if(d.remaining_gb!==undefined)uq(d.remaining_gb,d.has_subscription);
 }
 
-function switchTab(name){
-document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('act',e.dataset.tab===name));
-const page=document.getElementById('page');
-if(name==='main'){
-page.innerHTML=`<div class="center">
-<button class="power" id="power" onclick="toggleVpn()">⚡</button>
-<div class="plabel" id="plabel">Нажми, чтобы включить</div>
-<div class="psub" id="psub">VPN на сервере</div>
-</div>
-<div class="countries"><label>Страна выхода</label><div class="cscroll" id="cscroll"></div></div>
-<div class="quota"><div class="ring"><svg width="34" height="34"><circle class="bg" cx="17" cy="17" r="15"/><circle class="fg" id="qarc" cx="17" cy="17" r="15" stroke-dasharray="94.25" stroke-dashoffset="0"/></svg></div>
-<div class="qright"><div class="qgb" id="qgb">0 GB</div><div class="qsub" id="qsub">Загрузка...</div></div></div>
-<div class="stat off" id="stat"><b>⏳ Проверка...</b></div>`;
-renderCountries();loadUser();updateStatus();
-}else if(name==='subs'){
-page.innerHTML=`<div class="subs" style="padding-top:4px">
-<h2>💎 Тарифы</h2><p>Выбери свой план</p>
-<div class="scard"><div class="spri">1 GB</div><div class="sdesc">🌍 Все страны · ⚡ Max скорость</div></div>
-<div class="scard hl"><div class="spri">$4.99 <sp>/мес</sp></div><div class="sdesc">🚀 Безлимитный трафик · Приоритетная скорость</div>
-<button class="sbtn pr" onclick="(async()=>{if(!tgId)return toast('Открой через бота','er');const r=await af('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId,action:'subscribe'})});if((await r.json()).success)toast('Подписка оформлена!','ok')})()">💳 Купить $4.99</button></div>
-<div class="scard"><div class="spri" style="color:var(--orange)">$0.99</div><div class="sdesc">📦 +1 GB — без срока</div>
-<button class="sbtn sec" onclick="(async()=>{if(!tgId)return toast('Открой через бота','er');const r=await af('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tgId,action:'buy_gb'})});if((await r.json()).success)toast('+1 GB!','ok')})()">📦 Купить $0.99</button></div>
-</div>`
+function sw(n){
+document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('act',e.dataset.t===n));
+const p=document.getElementById('pg');
+if(n==='main'){
+p.innerHTML=`<div class="mid"><button class="btn" id="btn" onclick="tg()">⚡</button><div class="lbl" id="lbl">Нажми чтобы включить</div><div class="sub" id="psub">VPN на сервере</div></div>
+<div class="cntr"><label>Страна выхода</label><div class="cs" id="cs"></div></div>
+<div class="qc"><div class="ring"><svg width="30" height="30"><circle class="bg" cx="15" cy="15" r="13"/><circle class="fg" id="qa" cx="15" cy="15" r="13" stroke-dasharray="81.68" stroke-dashoffset="0"/></svg></div><div class="qr"><div class="qg" id="qg">0 GB</div><div class="ql" id="ql">...</div></div></div>
+<div class="st off" id="st">⏳ Проверка...</div>`;
+setTimeout(()=>{rc();lu();upd()},50);
+}else if(n==='subs'){
+p.innerHTML=`<div class="subs" style="padding-top:2px"><h2>💎 Тарифы</h2><p>Выбери план</p>
+<div class="sc"><div class="sp">1 GB</div><div class="sd">🌍 Все страны · Max скорость · Бесплатно</div></div>
+<div class="sc hl"><div class="sp">$4.99 <sp>/мес</sp></div><div class="sd">🚀 Безлимитный трафик · Приоритет · Все страны</div><button class="sb pr" onclick="(async()=>{if(!tg)return _t('Открой через бота','er');const r=await _f('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tg,action:'subscribe'})});if((await r.json()).success)_t('Подписка оформлена!','ok')})()">💳 Купить $4.99</button></div>
+<div class="sc"><div class="sp" style="color:var(--orange)">$0.99</div><div class="sd">📦 +1 GB трафика · Без срока</div><button class="sb se" onclick="(async()=>{if(!tg)return _t('Открой через бота','er');const r=await _f('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tg,action:'buy_gb'})});if((await r.json()).success){_t('+1 GB!','ok');lu()}})()">📦 Купить $0.99</button></div></div>`
 }else{
-page.innerHTML=`<div class="subs" style="padding-top:4px">
-<h2>👥 Партнёры</h2><p>Приглашай друзей — 30%</p>
-<div class="scard" style="text-align:center;padding:24px">
-<div style="font-size:40px;margin-bottom:12px">🏆</div>
-<div style="font-size:13px;color:var(--text2);line-height:1.7"><b style="color:var(--text);font-size:18px">30%</b><br>от каждой покупки друга<br>Выплаты на баланс</div>
-</div></div>`
+(async()=>{
+let aff='—',bal='0',ref='0';
+if(tg){try{const r=await _f('/api/user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({telegram_id:tg})});const d=await r.json();aff=d.affiliate_code||'—';bal=d.balance||0;ref=d.referrals||0}catch(e){}}
+p.innerHTML=`<div class="subs" style="padding-top:2px"><h2>👥 Партнёры</h2><p>Приглашай друзей — получай 30%</p>
+<div class="sc" style="text-align:center;padding:20px"><div style="font-size:36px;margin-bottom:10px">🏆</div>
+<div style="font-size:13px;color:var(--t2);line-height:1.7">
+<b style="color:var(--text);font-size:16px">30%</b> от каждой покупки друга
+</div>
+<div style="margin-top:12px;display:flex;gap:12px;justify-content:center">
+<div style="flex:1;padding:10px;border-radius:10px;background:rgba(255,255,255,.02)"><div style="font-size:11px;color:var(--t3)">Приглашено</div><div style="font-size:18px;font-weight:700">${ref}</div></div>
+<div style="flex:1;padding:10px;border-radius:10px;background:rgba(255,255,255,.02)"><div style="font-size:11px;color:var(--t3)">Баланс</div><div style="font-size:18px;font-weight:700">$${bal}</div></div>
+</div>
+<div style="margin-top:12px;padding:10px;border-radius:10px;background:rgba(255,255,255,.02);font-size:11px;color:var(--t3);word-break:break-all">🔗 https://t.me/danyanvpn_bot?start=${aff}</div>
+</div></div>`;
+})();
 }
-document.getElementById('content').scrollTop=0;
+document.getElementById('sc').scrollTop=0;
 }
 
-switchTab('main');
-document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-setInterval(updateStatus,15000);
+sw('main');
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>sw(b.dataset.t)));
 </script>
 </body>
 </html>
